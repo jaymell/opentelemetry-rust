@@ -67,7 +67,7 @@ mod reqwest {
     impl HttpClient for reqwest::Client {
         async fn send(&self, request: Request<Vec<u8>>) -> Result<Response<Bytes>, HttpError> {
             let request = request.try_into()?;
-            let response = self.execute(request).await?;
+            let response = self.execute(request).await?.error_for_status()?;
             Ok(Response::builder()
                 .status(response.status())
                 .body(response.bytes().await?)?)
