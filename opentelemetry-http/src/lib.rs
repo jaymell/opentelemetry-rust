@@ -6,10 +6,9 @@ pub use bytes::Bytes;
 pub use http::{Request, Response};
 
 use async_trait::async_trait;
-use opentelemetry_api::{
-    propagation::{Extractor, Injector},
-    trace::TraceError,
-};
+use opentelemetry_api::
+    propagation::{Extractor, Injector}
+;
 
 pub struct HeaderInjector<'a>(pub &'a mut http::HeaderMap);
 
@@ -211,11 +210,11 @@ pub mod hyper {
 /// Methods to make working with responses from the [`HttpClient`] trait easier.
 pub trait ResponseExt: Sized {
     /// Turn a response into an error if the HTTP status does not indicate success (200 - 299).
-    fn error_for_status(self) -> Result<Self, TraceError>;
+    fn error_for_status(self) -> Result<Self, HttpError>;
 }
 
 impl<T> ResponseExt for Response<T> {
-    fn error_for_status(self) -> Result<Self, TraceError> {
+    fn error_for_status(self) -> Result<Self, HttpError> {
         if self.status().is_success() {
             Ok(self)
         } else {
