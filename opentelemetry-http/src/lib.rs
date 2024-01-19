@@ -59,6 +59,8 @@ pub trait HttpClient: Debug + Send + Sync {
 
 #[cfg(feature = "reqwest")]
 mod reqwest {
+    use crate::ResponseExt;
+
     use super::{async_trait, Bytes, HttpClient, HttpError, Request, Response};
     use std::convert::TryInto;
 
@@ -69,8 +71,8 @@ mod reqwest {
             let response = self.execute(request).await?;
             Ok(Response::builder()
                 .status(response.status())
-                .body(response.bytes().await?)?)
-                .error_for_status()?
+                .body(response.bytes().await?)?
+                .error_for_status()?)
         }
     }
 
